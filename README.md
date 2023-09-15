@@ -48,7 +48,16 @@ And invoke bun with:
 $ mix bun default assets/js/app.js --outdir=priv/static/assets/
 ```
 
-The executable is kept at `_build/bun`.
+The executable is kept at `_build/bun`. You can access it directly to manage packages and [many more things](https://bun.sh/docs/cli):
+
+```bash
+# Install a NPM package such a htmx.org
+_build/bun add htmx.org
+# Install a local package such as phoenix_html
+_build/bun add ./deps/phoenix_html
+# Remove a dependency
+_build/bun add htmx.org
+```
 
 ## Profiles
 
