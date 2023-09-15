@@ -22,7 +22,7 @@ defmodule ElixirBun.MixProject do
         main: "Bun",
         source_url: @source_url,
         source_ref: "v#{@version}",
-        extras: ["CHANGELOG.md"]
+        extras: []
       ]
     ]
   end
@@ -38,7 +38,7 @@ defmodule ElixirBun.MixProject do
   defp deps do
     [
       {:castore, ">= 0.0.0"},
-      {:ex_doc, ">= 0.0.0", only: :docs}
+      {:ex_doc, ">= 0.0.0", only: :dev}
     ]
   end
 end
