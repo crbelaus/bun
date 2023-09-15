@@ -150,7 +150,7 @@ to add them to your application:
 
          import topbar from "../vendor/topbar"
 
-  2. Call `_build/bun add topbar --save` inside your assets
+  2. Call `_build/bun add topbar` inside your assets
      directory and `bun` will be able to automatically
      pick them up:
 

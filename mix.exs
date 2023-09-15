@@ -1,7 +1,7 @@
 defmodule ElixirBun.MixProject do
   use Mix.Project
 
-  @version "0.1.1"
+  @version "0.1.2"
   @source_url "https://github.com/crbelaus/elixir_bun"
 
   def project do
@@ -22,7 +22,7 @@ defmodule ElixirBun.MixProject do
         main: "Bun",
         source_url: @source_url,
         source_ref: "v#{@version}",
-        extras: []
+        extras: ["CHANGELOG.md"]
       ]
     ]
   end
