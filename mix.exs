@@ -1,28 +1,43 @@
 defmodule ElixirBun.MixProject do
   use Mix.Project
 
+  @version "0.1.0"
+  @source_url "https://github.com/crbelaus/elixir_bun"
+
   def project do
     [
       app: :elixir_bun,
-      version: "0.1.0",
+      version: @version,
       elixir: "~> 1.15",
-      start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      description: "Mix tasks for installing and invoking bun",
+      package: [
+        links: %{
+          "GitHub" => @source_url,
+          "bun" => "https://bun.sh"
+        }
+      ],
+      docs: [
+        main: "Bun",
+        source_url: @source_url,
+        source_ref: "v#{@version}",
+        extras: ["CHANGELOG.md"]
+      ]
     ]
   end
 
-  # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger]
+      extra_applications: [:logger, inets: :optional, ssl: :optional],
+      mod: {Bun, []},
+      env: [default: []]
     ]
   end
 
-  # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      # {:dep_from_hexpm, "~> 0.3.0"},
-      # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
+      {:castore, ">= 0.0.0"},
+      {:ex_doc, ">= 0.0.0", only: :docs}
     ]
   end
 end
