@@ -56,7 +56,7 @@ _build/bun add htmx.org
 # Install a local package such as phoenix_html
 _build/bun add ./deps/phoenix_html
 # Remove a dependency
-_build/bun add htmx.org
+_build/bun remove htmx.org
 ```
 
 ## Profiles
@@ -100,7 +100,7 @@ Now let's change `config/config.exs` to configure `bun` to use
 
 ```elixir
 config :elixir_bun,
-  version: "1.0.1",
+  version: "1.0.2",
   default: [
     args: ~w(build js/app.js --outdir=../priv/static/assets --external /fonts/* --external /images/*),
     cd: Path.expand("../assets", __DIR__),
