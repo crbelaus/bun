@@ -13,7 +13,7 @@ in dev:
 ```elixir
 def deps do
   [
-    {:bun, "~> 0.1", runtime: Mix.env() == :dev}
+    {:elixir_bun, "~> 0.1", runtime: Mix.env() == :dev}
   ]
 end
 ```
@@ -24,7 +24,7 @@ then it only needs to be a dev dependency:
 ```elixir
 def deps do
   [
-    {:bun, "~> 0.1", only: :dev}
+    {:elixir_bun, "~> 0.1", only: :dev}
   ]
 end
 ```
@@ -33,7 +33,7 @@ Once installed, change your `config/config.exs` to pick your
 bun version of choice:
 
 ```elixir
-config :bun, version: "1.0.1"
+config :elixir_bun, version: "1.0.1"
 ```
 
 Now you can install bun by running:
@@ -80,8 +80,8 @@ First add it as a dependency in your `mix.exs`:
 ```elixir
 def deps do
   [
-    {:phoenix, github: "phoenixframework/phoenix", branch: "v1.5", override: true},
-    {:bun, "~> 0.1", runtime: Mix.env() == :dev}
+    {:phoenix, github: "phoenixframework/phoenix"},
+    {:elixir_bun, "~> 0.1", runtime: Mix.env() == :dev}
   ]
 end
 ```
