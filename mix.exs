@@ -15,7 +15,8 @@ defmodule ElixirBun.MixProject do
         links: %{
           "GitHub" => @source_url,
           "bun" => "https://bun.sh"
-        }
+        },
+        licenses: ["MIT"]
       ],
       docs: [
         main: "Bun",
