@@ -33,7 +33,7 @@ Once installed, change your `config/config.exs` to pick your
 bun version of choice:
 
 ```elixir
-config :elixir_bun, version: "1.0.1"
+config :elixir_bun, version: "1.0.2"
 ```
 
 Now you can install bun by running:
@@ -68,7 +68,7 @@ directory, the OS environment, and default arguments to the
 
 ```elixir
 config :elixir_bun,
-  version: "1.0.1",
+  version: "1.0.2",
   default: [
     args: ~w(build js/app.js),
     cd: Path.expand("../assets", __DIR__)
