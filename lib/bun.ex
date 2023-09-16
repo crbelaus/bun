@@ -81,7 +81,7 @@ defmodule Bun do
   def latest_version, do: @latest_version
 
   @doc """
-  Returns the configured esbuild version.
+  Returns the configured bun version.
   """
   def configured_version do
     Application.get_env(:elixir_bun, :version, latest_version())
@@ -186,7 +186,7 @@ defmodule Bun do
     tmp_dir =
       freshdir_p(:filename.basedir(:user_cache, "phx-bun", tmp_opts)) ||
         freshdir_p(Path.join(System.tmp_dir!(), "phx-bun")) ||
-        raise "could not install esbuild. Set MIX_XGD=1 and then set XDG_CACHE_HOME to the path you want to use as cache"
+        raise "could not install bun. Set MIX_XGD=1 and then set XDG_CACHE_HOME to the path you want to use as cache"
 
     url = "https://github.com/oven-sh/bun/releases/download/bun-v#{version}/bun-#{target()}.zip"
 
@@ -230,7 +230,7 @@ defmodule Bun do
           "i686" -> "#{osname}-ia32"
           "i386" -> "#{osname}-ia32"
           "aarch64" -> "#{osname}-aarch64"
-          _ -> raise "esbuild is not available for architecture: #{arch_str}"
+          _ -> raise "bun is not available for architecture: #{arch_str}"
         end
     end
   end
@@ -308,6 +308,6 @@ defmodule Bun do
   end
 
   defp cacertfile() do
-    Application.get_env(:esbuild, :cacerts_path) || CAStore.file_path()
+    Application.get_env(:bun, :cacerts_path) || CAStore.file_path()
   end
 end

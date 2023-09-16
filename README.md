@@ -115,7 +115,7 @@ For development, we want to enable watch mode. So find the `watchers`
 configuration in your `config/dev.exs` and add:
 
 ```elixir
-  esbuild: {Bun, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]}
+  bun: {Bun, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]}
 ```
 
 Note we are inlining source maps and enabling the file system watcher.
@@ -170,4 +170,4 @@ import "../css/app.css"
 
 Copyright (c) 2023 Cristian Álvarez.
 
-esbuild source code is licensed under the [MIT License](LICENSE.md).
+elixir_bun source code is licensed under the [MIT License](LICENSE.md).
