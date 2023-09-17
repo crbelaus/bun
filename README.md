@@ -1,4 +1,7 @@
-# Bun
+<p align="center">
+  <img align="center" width="40%" src="assets/logo.svg" alt="Bun Logo">
+  <h1>Bun</h1>
+</p>
 
 Mix tasks for installing and invoking [bun](https://bun.sh).
 
