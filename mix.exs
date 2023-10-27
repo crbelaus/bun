@@ -2,11 +2,11 @@ defmodule ElixirBun.MixProject do
   use Mix.Project
 
   @version "0.1.4"
-  @source_url "https://github.com/crbelaus/elixir_bun"
+  @source_url "https://github.com/crbelaus/bun"
 
   def project do
     [
-      app: :elixir_bun,
+      app: :bun,
       version: @version,
       elixir: "~> 1.15",
       deps: deps(),

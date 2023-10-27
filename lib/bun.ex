@@ -10,7 +10,7 @@ defmodule Bun do
   profile called `:default` which you can configure its args, current
   directory and environment:
 
-      config :elixir_bun,
+      config :bun,
         version: "#{@latest_version}",
         default: [
           args: ~w(build js/app.js  --outdir=../priv/static/assets),
@@ -40,7 +40,7 @@ defmodule Bun do
   `MIX_BUN_PATH` environment variable, which you can then read in
   your configuration file:
 
-      config :elixir_bun, path: System.get_env("MIX_BUN_PATH")
+      config :bun, path: System.get_env("MIX_BUN_PATH")
 
   """
 
@@ -49,11 +49,11 @@ defmodule Bun do
 
   @doc false
   def start(_, _) do
-    unless Application.get_env(:elixir_bun, :version) do
+    unless Application.get_env(:bun, :version) do
       Logger.warning("""
       bun version is not configured. Please set it in your config files:
 
-          config :elixir_bun, :version, "#{latest_version()}"
+          config :bun, :version, "#{latest_version()}"
       """)
     end
 
@@ -84,7 +84,7 @@ defmodule Bun do
   Returns the configured bun version.
   """
   def configured_version do
-    Application.get_env(:elixir_bun, :version, latest_version())
+    Application.get_env(:bun, :version, latest_version())
   end
 
   @doc """
@@ -93,11 +93,11 @@ defmodule Bun do
   Returns nil if the profile does not exist.
   """
   def config_for!(profile) when is_atom(profile) do
-    Application.get_env(:elixir_bun, profile) ||
+    Application.get_env(:bun, profile) ||
       raise ArgumentError, """
       unknown bun profile. Make sure the profile is defined in your config/config.exs file, such as:
 
-          config :elixir_bun,
+          config :bun,
             #{profile}: [
               args: ~w(js/app.js --outdir=../priv/static/assets),
               cd: Path.expand("../assets", __DIR__),
@@ -114,7 +114,7 @@ defmodule Bun do
   def bin_path do
     name = "bun"
 
-    Application.get_env(:elixir_bun, :path) ||
+    Application.get_env(:bun, :path) ||
       if Code.ensure_loaded?(Mix.Project) do
         Path.join(Path.dirname(Mix.Project.build_path()), name)
       else
@@ -164,7 +164,7 @@ defmodule Bun do
     # If we launch the bun process directly, it will keep running as a zombie process even after
     # closing the parent Elixir process. To avoid this issue we wrap the application in a script
     # that checks for stdin to ensure bun is closed.
-    watcher_path = Path.join(:code.priv_dir(:elixir_bun), "bun_launcher.sh")
+    watcher_path = Path.join(:code.priv_dir(:bun), "bun_launcher.sh")
 
     watcher_path
     |> System.cmd([bin_path()] ++ args ++ extra_args, opts)
@@ -282,7 +282,7 @@ defmodule Bun do
         couldn't fetch #{url}: #{inspect(other)}
 
         You may also install the "bun" executable manually, \
-        see the docs: https://hexdocs.pm/elixir_bun
+        see the docs: https://hexdocs.pm/bun
         """
     end
   end
