@@ -1,4 +1,4 @@
-defmodule ElixirBun.MixProject do
+defmodule Bun.MixProject do
   use Mix.Project
 
   @version "1.0.0"

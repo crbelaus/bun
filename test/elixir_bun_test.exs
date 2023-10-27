@@ -1,8 +1,8 @@
-defmodule ElixirBunTest do
+defmodule BunTest do
   use ExUnit.Case
-  doctest ElixirBun
+  doctest Bun
 
   test "greets the world" do
-    assert ElixirBun.hello() == :world
+    assert Bun.hello() == :world
   end
 end
