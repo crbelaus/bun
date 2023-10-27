@@ -16,7 +16,7 @@ in dev:
 ```elixir
 def deps do
   [
-    {:bun, "~> 0.1", runtime: Mix.env() == :dev}
+    {:bun, "~> 1.0", runtime: Mix.env() == :dev}
   ]
 end
 ```
@@ -27,7 +27,7 @@ then it only needs to be a dev dependency:
 ```elixir
 def deps do
   [
-    {:bun, "~> 0.1", only: :dev}
+    {:bun, "~> 1.0", only: :dev}
   ]
 end
 ```
@@ -93,7 +93,7 @@ First add it as a dependency in your `mix.exs`:
 def deps do
   [
     {:phoenix, github: "phoenixframework/phoenix"},
-    {:bun, "~> 0.1", runtime: Mix.env() == :dev}
+    {:bun, "~> 1.0", runtime: Mix.env() == :dev}
   ]
 end
 ```
