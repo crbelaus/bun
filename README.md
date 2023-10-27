@@ -16,7 +16,7 @@ in dev:
 ```elixir
 def deps do
   [
-    {:elixir_bun, "~> 0.1", runtime: Mix.env() == :dev}
+    {:bun, "~> 0.1", runtime: Mix.env() == :dev}
   ]
 end
 ```
@@ -27,7 +27,7 @@ then it only needs to be a dev dependency:
 ```elixir
 def deps do
   [
-    {:elixir_bun, "~> 0.1", only: :dev}
+    {:bun, "~> 0.1", only: :dev}
   ]
 end
 ```
@@ -36,7 +36,7 @@ Once installed, change your `config/config.exs` to pick your
 bun version of choice:
 
 ```elixir
-config :elixir_bun, version: "1.0.7"
+config :bun, version: "1.0.7"
 ```
 
 Now you can install bun by running:
@@ -70,7 +70,7 @@ directory, the OS environment, and default arguments to the
 `bun` task:
 
 ```elixir
-config :elixir_bun,
+config :bun,
   version: "1.0.7",
   default: [
     args: ~w(build js/app.js),
@@ -93,7 +93,7 @@ First add it as a dependency in your `mix.exs`:
 def deps do
   [
     {:phoenix, github: "phoenixframework/phoenix"},
-    {:elixir_bun, "~> 0.1", runtime: Mix.env() == :dev}
+    {:bun, "~> 0.1", runtime: Mix.env() == :dev}
   ]
 end
 ```
@@ -102,7 +102,7 @@ Now let's change `config/config.exs` to configure `bun` to use
 `assets/js/app.js` as an entry point and write to `priv/static/assets`:
 
 ```elixir
-config :elixir_bun,
+config :bun,
   version: "1.0.7",
   default: [
     args: ~w(build js/app.js --outdir=../priv/static/assets --external /fonts/* --external /images/*),
@@ -184,4 +184,4 @@ import "../css/app.css"
 
 Copyright (c) 2023 Cristian Álvarez.
 
-elixir_bun source code is licensed under the [MIT License](LICENSE.md).
+bun source code is licensed under the [MIT License](LICENSE.md).

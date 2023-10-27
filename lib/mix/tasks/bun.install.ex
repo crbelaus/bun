@@ -10,7 +10,7 @@ defmodule Mix.Tasks.Bun.Install do
   By default, it installs #{Bun.latest_version()} but you
   can configure it in your config files, such as:
 
-      config :elixir_bun, :version, "#{Bun.latest_version()}"
+      config :bun, :version, "#{Bun.latest_version()}"
 
   ## Options
 

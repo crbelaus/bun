@@ -38,7 +38,7 @@ defmodule Mix.Tasks.Bun do
     if opts[:runtime_config] do
       Mix.Task.run("app.config")
     else
-      Application.ensure_all_started(:elixir_bun)
+      Application.ensure_all_started(:bun)
     end
 
     Mix.Task.reenable("bun")
