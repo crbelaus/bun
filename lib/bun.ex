@@ -1,6 +1,7 @@
 defmodule Bun do
   # https://github.com/oven-sh/bun/releases
-  @latest_version "1.0.7"
+  @latest_version "1.0.9"
+
   @moduledoc """
   Bun is an installer and runner for [bun](https://bun.sh).
 
