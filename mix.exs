@@ -23,6 +23,9 @@ defmodule Bun.MixProject do
         source_url: @source_url,
         source_ref: "v#{@version}",
         extras: ["CHANGELOG.md"]
+      ],
+      aliases: [
+        test: ["bun.install --if-missing", "test"]
       ]
     ]
   end
