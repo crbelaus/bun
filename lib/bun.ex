@@ -246,8 +246,8 @@ defmodule Bun do
     url = String.to_charlist(url)
     Logger.debug("Downloading bun from #{url}")
 
-    {:ok, _} = Application.ensure_all_started(:inets)
-    {:ok, _} = Application.ensure_all_started(:ssl)
+    Mix.ensure_application!(:inets)
+    Mix.ensure_application!(:ssl)
 
     if proxy = proxy_for_scheme(scheme) do
       %{host: host, port: port} = URI.parse(proxy)
