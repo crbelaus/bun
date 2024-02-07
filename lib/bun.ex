@@ -1,6 +1,6 @@
 defmodule Bun do
   # https://github.com/oven-sh/bun/releases
-  @latest_version "1.0.9"
+  @latest_version "1.0.26"
 
   @moduledoc """
   Bun is an installer and runner for [bun](https://bun.sh).
@@ -246,8 +246,8 @@ defmodule Bun do
     url = String.to_charlist(url)
     Logger.debug("Downloading bun from #{url}")
 
-    {:ok, _} = Application.ensure_all_started(:inets)
-    {:ok, _} = Application.ensure_all_started(:ssl)
+    Mix.ensure_application!(:inets)
+    Mix.ensure_application!(:ssl)
 
     if proxy = proxy_for_scheme(scheme) do
       %{host: host, port: port} = URI.parse(proxy)
