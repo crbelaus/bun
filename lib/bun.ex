@@ -165,10 +165,10 @@ defmodule Bun do
     # If we launch the bun process directly, it will keep running as a zombie process even after
     # closing the parent Elixir process. To avoid this issue we wrap the application in a script
     # that checks for stdin to ensure bun is closed.
-    watcher_path = Path.join(:code.priv_dir(:bun), "bun_launcher.sh")
+    watcher_path = Path.join(:code.priv_dir(:bun), "wrapper.js")
 
-    watcher_path
-    |> System.cmd([bin_path()] ++ args ++ extra_args, opts)
+    bin_path()
+    |> System.cmd([watcher_path, bin_path()] ++ args ++ extra_args, opts)
     |> elem(1)
   end
 
