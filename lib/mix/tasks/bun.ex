@@ -13,33 +13,19 @@ defmodule Mix.Tasks.Bun do
   If bun is not installed, it is automatically downloaded.
   Note the arguments given to this task will be appended
   to any configured arguments.
-
-  ## Options
-
-    * `--runtime-config` - load the runtime configuration
-      before executing command
-
-  Note flags to control this Mix task must be given before the
-  profile:
-
-      $ mix bun --runtime-config default assets/js/app.js
-
   """
 
   @shortdoc "Invokes bun with the profile and args"
-
   use Mix.Task
+
+  @requirements ["app.config"]
 
   @impl true
   def run(args) do
-    switches = [runtime_config: :boolean]
-    {opts, remaining_args} = OptionParser.parse_head!(args, switches: switches)
+    switches = []
+    {_opts, remaining_args} = OptionParser.parse_head!(args, switches: switches)
 
-    if opts[:runtime_config] do
-      Mix.Task.run("app.config")
-    else
-      Application.ensure_all_started(:bun)
-    end
+    Application.ensure_all_started(:bun)
 
     Mix.Task.reenable("bun")
     install_and_run(remaining_args)
