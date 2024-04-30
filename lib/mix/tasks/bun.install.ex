@@ -14,9 +14,6 @@ defmodule Mix.Tasks.Bun.Install do
 
   ## Options
 
-      * `--runtime-config` - load the runtime configuration
-        before executing command
-
       * `--if-missing` - install only if the given version
         does not exist
   """
@@ -24,14 +21,14 @@ defmodule Mix.Tasks.Bun.Install do
   @shortdoc "Installs bun under _build"
   use Mix.Task
 
+  @requirements ["app.config"]
+
   @impl true
   def run(args) do
     valid_options = [runtime_config: :boolean, if_missing: :boolean]
 
     case OptionParser.parse_head!(args, strict: valid_options) do
       {opts, []} ->
-        if opts[:runtime_config], do: Mix.Task.run("app.config")
-
         if opts[:if_missing] && latest_version?() do
           :ok
         else
@@ -43,7 +40,6 @@ defmodule Mix.Tasks.Bun.Install do
         Invalid arguments to bun.install, expected one of:
 
             mix bun.install
-            mix bun.install --runtime-config
             mix bun.install --if-missing
         """)
     end
