@@ -132,12 +132,12 @@ alias for deployments, which will also use the `--minify` option:
 
 By default, Phoenix comes with three JS libraries that you'll most likely use in your project: phoenix, phoenix_html and phoenix_live_view.
 
-To tell bun about those libraries you will need to add the following to the `package.json`:
+To tell bun about those libraries you will need to add the following to the `assets/package.json` file:
 
 ```json
 {
   "workspaces": [
-    "deps/*"
+    "../deps/*"
   ],
   "dependencies": {
     "phoenix": "workspace:*",
