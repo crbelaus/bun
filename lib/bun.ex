@@ -149,27 +149,34 @@ defmodule Bun do
   """
   def run(profile, extra_args) when is_atom(profile) and is_list(extra_args) do
     config = config_for!(profile)
-    args = config[:args] || []
+    args = (config[:args] || []) ++ extra_args
 
-    if args == [] and extra_args == [] do
-      raise "no arguments passed to bun"
-    end
+    {_, exit_status} =
+      run_bun_command(args,
+        cd: config[:cd] || File.cwd!(),
+        env: config[:env] || %{},
+        into: IO.stream(:stdio, :line),
+        stderr_to_stdout: true
+      )
 
-    opts = [
-      cd: config[:cd] || File.cwd!(),
-      env: config[:env] || %{},
-      into: IO.stream(:stdio, :line),
-      stderr_to_stdout: true
-    ]
+    exit_status
+  end
 
-    # If we launch the bun process directly, it will keep running as a zombie process even after
-    # closing the parent Elixir process. To avoid this issue we wrap the application in a script
-    # that checks for stdin to ensure bun is closed.
-    watcher_path = Path.join(:code.priv_dir(:bun), "wrapper.js")
+  defp run_bun_command([], _opts) do
+    raise "no arguments passed to bun"
+  end
 
-    bin_path()
-    |> System.cmd([watcher_path, bin_path()] ++ args ++ extra_args, opts)
-    |> elem(1)
+  # `bun build` will keep running as a zombie process even after closing the parent Elixir
+  # process. The wrapper script monitors stdin to ensure that the bun process is closed.
+  defp run_bun_command(["build" | _] = args, opts) do
+    wrapper_path = Path.join(:code.priv_dir(:bun), "wrapper.js")
+
+    System.cmd(bin_path(), [wrapper_path, bin_path()] ++ args, opts)
+  end
+
+  # Other commands such as `bun run` don't leave zombie processes and can be run directly.
+  defp run_bun_command(args, opts) do
+    System.cmd(bin_path(), args, opts)
   end
 
   @doc """
