@@ -153,9 +153,9 @@ _build/bun install
 
 ### Replace esbuild with bun
 
-You can use `bun` to build CSS with TailwindCSS as well, replacing the `tailwindcss` library in elixir.
+You can use `bun` to build CSS with TailwindCSS, replacing both `esbuild` and the `tailwindcss` library in Elixir.
 
-First, add `tailwindcss` as a dependency in the `package.json`:
+First, update `assets/package.json`:
 
 ```json
 "dependencies": {
@@ -167,7 +167,7 @@ First, add `tailwindcss` as a dependency in the `package.json`:
 }
 ```
 
-Next, we configure bun to build the css using the tailwindcss library with an additional bun profile in `config/config.exs`:
+Update your `config/config.exs`:
 
 ```elixir
 config :bun,
@@ -180,15 +180,13 @@ config :bun,
 
 Make sure to remove the `:tailwind` config in this file as well.
 
-For development, we also want to run tailwindcss in watch mode. This is accomplished by adding a new watcher in the `config/dev.exs`:
+In `config/dev.exs`, replace the watchers:
 
 ```elixir
 bun_css: {Bun, :install_and_run, [:css, ~w(--watch)]}
 ```
 
-Make sure to also remove the `tailwind` watcher.
-
-In the `mix.exs`, remove the references to the tailwind command from the aliases and replace it with bun:
+Update `mix.exs` aliases:
 
 ```elixir
 "assets.setup": ["bun.install"],
@@ -196,7 +194,7 @@ In the `mix.exs`, remove the references to the tailwind command from the aliases
 "assets.deploy": ["bun default --minify", "bun css --minify", "phx.digest"]
 ```
 
-After all is done, you can remove the `tailwind` dependency from your `mix.exs` dependencies.
+Remove the `tailwind` and `esbuild` dependencies from your `mix.exs`.
 
 ## Third-party JS packages
 
