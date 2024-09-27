@@ -207,7 +207,9 @@ defmodule Bun do
 
     download_path =
       case :zip.unzip(zip, cwd: to_charlist(tmp_dir)) do
-        {:ok, download_path} -> download_path
+        {:ok, [download_path]} -> download_path
+        # OTP 27.1 and newer versions return both the unzipped folder and file
+        {:ok, [_download_folder, download_path]} -> download_path
         other -> raise "couldn't unpack archive: #{inspect(other)}"
       end
 
