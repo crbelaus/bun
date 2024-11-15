@@ -16,13 +16,13 @@ defmodule BunTest do
   end
 
   test "updates on install" do
-    Application.put_env(:bun, :version, "1.0.0")
+    Application.put_env(:bun, :version, "1.1.0")
 
     Mix.Task.rerun("bun.install", ["--if-missing"])
 
     assert ExUnit.CaptureIO.capture_io(fn ->
              assert Bun.run(:default, ["--version"]) == 0
-           end) =~ "1.0.0"
+           end) =~ "1.1.0"
 
     Application.delete_env(:bun, :version)
 

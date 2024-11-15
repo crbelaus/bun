@@ -1,6 +1,7 @@
 defmodule Bun do
   # https://github.com/oven-sh/bun/releases
-  @latest_version "1.1.22"
+  @latest_version "1.1.34"
+  @min_windows_version "1.1.0"
 
   @moduledoc """
   Bun is an installer and runner for [bun](https://bun.sh).
@@ -85,7 +86,19 @@ defmodule Bun do
   Returns the configured bun version.
   """
   def configured_version do
-    Application.get_env(:bun, :version, latest_version())
+    version = Application.get_env(:bun, :version, latest_version())
+
+    case :os.type() do
+      {:win32, _} ->
+        if Version.compare(version, @min_windows_version) in [:eq, :gt] do
+          version
+        else
+          raise "bun on windows is available starting from #{@min_windows_version}"
+        end
+
+      _ ->
+        version
+    end
   end
 
   @doc """
@@ -113,7 +126,11 @@ defmodule Bun do
   The executable may not be available if it was not yet installed.
   """
   def bin_path do
-    name = "bun"
+    name =
+      case :os.type() do
+        {:win32, _} -> "bun.exe"
+        _ -> "bun"
+      end
 
     Application.get_env(:bun, :path) ||
       if Code.ensure_loaded?(Mix.Project) do
@@ -233,7 +250,7 @@ defmodule Bun do
     case :os.type() do
       # Assuming it's an x86 CPU
       {:win32, _} ->
-        raise "bun is not available for Windows"
+        "windows-x64"
 
       {:unix, osname} ->
         arch_str = :erlang.system_info(:system_architecture)
