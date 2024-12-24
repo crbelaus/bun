@@ -223,10 +223,9 @@ defmodule Bun do
     zip = fetch_body!(url)
 
     download_path =
-      case :zip.unzip(zip, cwd: to_charlist(tmp_dir)) do
+      # Certain Bun versions contain multiple files in the zip archive, we just want the Bun executable.
+      case :zip.unzip(zip, cwd: to_charlist(tmp_dir), file_list: [~c[bun-#{target()}/bun]]) do
         {:ok, [download_path]} -> download_path
-        # OTP 27.1 and newer versions return both the unzipped folder and file
-        {:ok, [_download_folder, download_path]} -> download_path
         other -> raise "couldn't unpack archive: #{inspect(other)}"
       end
 
