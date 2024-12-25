@@ -222,8 +222,8 @@ defmodule Bun do
 
     zip = fetch_body!(url)
 
+    # Certain Bun versions contain multiple files in the zip archive, we just want the Bun executable.
     download_path =
-      # Certain Bun versions contain multiple files in the zip archive, we just want the Bun executable.
       case :zip.unzip(zip, cwd: to_charlist(tmp_dir), file_list: [~c[bun-#{target()}/bun]]) do
         {:ok, [download_path]} -> download_path
         other -> raise "couldn't unpack archive: #{inspect(other)}"
