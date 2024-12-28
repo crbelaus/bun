@@ -210,23 +210,14 @@ defmodule Bun do
   end
 
   def install do
-    version = configured_version()
-    tmp_opts = if System.get_env("MIX_XDG"), do: %{os: :linux}, else: %{}
-
-    tmp_dir =
-      freshdir_p(:filename.basedir(:user_cache, "phx-bun", tmp_opts)) ||
-        freshdir_p(Path.join(System.tmp_dir!(), "phx-bun")) ||
-        raise "could not install bun. Set MIX_XGD=1 and then set XDG_CACHE_HOME to the path you want to use as cache"
-
-    url = "https://github.com/oven-sh/bun/releases/download/bun-v#{version}/bun-#{target()}.zip"
-
-    zip = fetch_body!(url)
+    zip =
+      fetch_body!(
+        "https://github.com/oven-sh/bun/releases/download/bun-v#{configured_version()}/bun-#{target()}.zip"
+      )
 
     download_path =
-      case :zip.unzip(zip, cwd: to_charlist(tmp_dir)) do
+      case extract_bun_binary(zip) do
         {:ok, [download_path]} -> download_path
-        # OTP 27.1 and newer versions return both the unzipped folder and file
-        {:ok, [_download_folder, download_path]} -> download_path
         other -> raise "couldn't unpack archive: #{inspect(other)}"
       end
 
@@ -265,6 +256,23 @@ defmodule Bun do
           _ -> raise "bun is not available for architecture: #{arch_str}"
         end
     end
+  end
+
+  defp extract_bun_binary(zip) do
+    tmp_opts = if System.get_env("MIX_XDG"), do: %{os: :linux}, else: %{}
+
+    tmp_dir =
+      freshdir_p(:filename.basedir(:user_cache, "phx-bun", tmp_opts)) ||
+        freshdir_p(Path.join(System.tmp_dir!(), "phx-bun")) ||
+        raise "could not install bun. Set MIX_XGD=1 and then set XDG_CACHE_HOME to the path you want to use as cache"
+
+    # Certain Bun versions contain multiple files in the zip archive, we just want the Bun executable.
+    zipped_target =
+      if String.contains?(target(), "windows"),
+        do: "bun-#{target()}/bun.exe",
+        else: "bun-#{target()}/bun"
+
+    :zip.unzip(zip, cwd: to_charlist(tmp_dir), file_list: [to_charlist(zipped_target)])
   end
 
   defp fetch_body!(url) do
