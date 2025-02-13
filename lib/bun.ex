@@ -1,6 +1,6 @@
 defmodule Bun do
   # https://github.com/oven-sh/bun/releases
-  @latest_version "1.1.42"
+  @latest_version "1.2.2"
   @min_windows_version "1.1.0"
 
   @moduledoc """
