@@ -245,16 +245,21 @@ defmodule Bun do
 
       {:unix, osname} ->
         arch_str = :erlang.system_info(:system_architecture)
-        [arch | _] = arch_str |> List.to_string() |> String.split("-")
+        [arch | other] = arch_str |> List.to_string() |> String.split("-")
 
-        case arch do
-          "amd64" -> "#{osname}-x64"
-          "x86_64" -> "#{osname}-x64"
-          "i686" -> "#{osname}-ia32"
-          "i386" -> "#{osname}-ia32"
-          "aarch64" -> "#{osname}-aarch64"
-          _ -> raise "bun is not available for architecture: #{arch_str}"
-        end
+        target =
+          case arch do
+            "amd64" -> "#{osname}-x64"
+            "x86_64" -> "#{osname}-x64"
+            "i686" -> "#{osname}-ia32"
+            "i386" -> "#{osname}-ia32"
+            "aarch64" -> "#{osname}-aarch64"
+            _ -> raise "bun is not available for architecture: #{arch_str}"
+          end
+
+        if Enum.any?(other, &(&1 == "musl")),
+          do: target <> "-musl",
+          else: target
     end
   end
 
