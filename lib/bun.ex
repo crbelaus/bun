@@ -257,11 +257,9 @@ defmodule Bun do
             _ -> raise "bun is not available for architecture: #{arch_str}"
           end
 
-        if Enum.any?(other, &(&1 == "musl")) do
-          target <> "-musl"
-        else
-          target
-        end
+        if Enum.any?(other, &(&1 == "musl")),
+          do: target <> "-musl",
+          else: target
     end
   end
 
