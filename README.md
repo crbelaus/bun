@@ -72,18 +72,18 @@ directory, the OS environment, and default arguments to the
 ```elixir
 config :bun,
   version: "1.1.22",
-  default: [
+  js: [
     args: ~w(build js/app.js),
     cd: Path.expand("../assets", __DIR__)
   ]
 ```
 
-When `mix bun default` is invoked, the task arguments will be appended
+When `mix bun js` is invoked, the task arguments will be appended
 to the ones configured above.
 
 ## Adding to Phoenix
 
-To add `bun` to an application using Phoenix, you need only four steps.  Installation requires that Phoenix watchers can accept module-function-args tuples which is not built into Phoenix 1.5.9.
+To add `bun` to an application using Phoenix, you need only four steps. Installation requires that Phoenix v1.6+:
 
 First add it as a dependency in your `mix.exs`:
 
@@ -102,10 +102,9 @@ Now let's change `config/config.exs` to configure `bun` to use
 ```elixir
 config :bun,
   version: "1.1.22",
-  default: [
+  js: [
     args: ~w(build js/app.js --outdir=../priv/static/assets --external /fonts/* --external /images/*),
-    cd: Path.expand("../assets", __DIR__),
-    env: %{}
+    cd: Path.expand("../assets", __DIR__)
   ]
 ```
 
@@ -116,16 +115,18 @@ For development, we want to enable watch mode. So find the `watchers`
 configuration in your `config/dev.exs` and add:
 
 ```elixir
-  bun: {Bun, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]}
+  bun_js: {Bun, :install_and_run, [:js, ~w(--sourcemap=inline --watch)]}
 ```
 
 Note we are inlining source maps and enabling the file system watcher.
 
-Finally, back in your `mix.exs`, make sure you have a `assets.deploy`
-alias for deployments, which will also use the `--minify` option:
+Finally, back in your `mix.exs`, let's configure Phoenix `assets` tasks
+to use `bun` instead:
 
 ```elixir
-"assets.deploy": ["bun default --minify", "phx.digest"]
+"assets.setup": ["bun.install --if-missing"],
+"assets.build": ["bun js"],
+"assets.deploy": ["bun js --minify", "phx.digest"],
 ```
 
 ### Phoenix JS libraries
@@ -146,10 +147,14 @@ To tell bun about those libraries you will need to add the following to the `ass
   }
 }
 ```
-and run:
+
+and then configure `mix assets.setup` to install them:
+
 ```
-_build/bun install
+"assets.setup": ["bun.install --if-missing", "cmd --cd assets ../_build/bun install"],
 ```
+
+Now run `mix assets.setup` and you are good to go!
 
 ### Replace esbuild with bun
 
@@ -173,8 +178,7 @@ Update your `config/config.exs`:
 config :bun,
   css: [
     args: ~w(run tailwindcss --input=css/app.css --output=../priv/static/assets/app.css),
-    cd: Path.expand("../assets", __DIR__),
-    env: %{}
+    cd: Path.expand("../assets", __DIR__)
   ]
 ```
 
@@ -189,9 +193,9 @@ bun_css: {Bun, :install_and_run, [:css, ~w(--watch)]}
 Update `mix.exs` aliases:
 
 ```elixir
-"assets.setup": ["bun.install"],
-"assets.build": ["bun default", "bun css"],
-"assets.deploy": ["bun default --minify", "bun css --minify", "phx.digest"]
+"assets.setup": ["bun.install --if-missing", "cmd --cd assets ../_build/bun install"],
+"assets.build": ["bun js", "bun css"],
+"assets.deploy": ["bun css --minify", "bun js --minify", "tc.build", "phx.digest"],
 ```
 
 Remove the `tailwind` and `esbuild` dependencies from your `mix.exs`.
@@ -207,7 +211,7 @@ to add them to your application:
 
          import topbar from "../vendor/topbar"
 
-  2. Call `_build/bun add topbar` inside your assets
+  2. Call `../_build/bun add topbar` inside your assets
      directory and `bun` will be able to automatically
      pick them up:
 
