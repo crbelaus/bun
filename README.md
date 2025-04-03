@@ -72,14 +72,19 @@ directory, the OS environment, and default arguments to the
 ```elixir
 config :bun,
   version: "1.1.22",
+  install: [
+    args: ~w(install),
+    cd: Path.expand("../assets", __DIR__)
+  ],
   js: [
     args: ~w(build js/app.js),
     cd: Path.expand("../assets", __DIR__)
   ]
 ```
 
-When `mix bun js` is invoked, the task arguments will be appended
-to the ones configured above.
+When `mix bun js` is invoked, it will invoke `bun build js/app.js`
+appending any argument given to the task. You can also use
+`mix bun install` to install bun dependencies.
 
 ## Adding to Phoenix
 
@@ -103,9 +108,7 @@ entry point and write to `priv/static/assets`:
 ```elixir
 config :bun,
   version: "1.1.22",
-  install: [
-    args: ~w(install), cd: Path.expand("../assets", __DIR__)
-  ],
+  install: [args: ~w(install), cd: Path.expand("../assets", __DIR__)],
   js: [
     args: ~w(build js/app.js --outdir=../priv/static/assets --external /fonts/* --external /images/*),
     cd: Path.expand("../assets", __DIR__)
