@@ -183,6 +183,8 @@ Update your `config/config.exs`:
 
 ```elixir
 config :bun,
+  install: [...],
+  js: [...],
   css: [
     args: ~w(run tailwindcss --input=css/app.css --output=../priv/static/assets/app.css),
     cd: Path.expand("../assets", __DIR__)
