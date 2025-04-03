@@ -204,7 +204,7 @@ Update `mix.exs` aliases:
 ```elixir
 "assets.setup": ["bun.install --if-missing", "bun install"],
 "assets.build": ["bun js", "bun css"],
-"assets.deploy": ["bun css --minify", "bun js --minify", "tc.build", "phx.digest"],
+"assets.deploy": ["bun css --minify", "bun js --minify", "phx.digest"],
 ```
 
 Remove the `tailwind` and `esbuild` dependencies from your `mix.exs`.
