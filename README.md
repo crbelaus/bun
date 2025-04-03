@@ -96,12 +96,16 @@ def deps do
 end
 ```
 
-Now let's change `config/config.exs` to configure `bun` to use
-`assets/js/app.js` as an entry point and write to `priv/static/assets`:
+Now let's change `config/config.exs` to configure `bun` to add two commands,
+one to install dependencies and another to build `assets/js/app.js` as an
+entry point and write to `priv/static/assets`:
 
 ```elixir
 config :bun,
   version: "1.1.22",
+  install: [
+    args: ~w(install), cd: Path.expand("../assets", __DIR__)
+  ],
   js: [
     args: ~w(build js/app.js --outdir=../priv/static/assets --external /fonts/* --external /images/*),
     cd: Path.expand("../assets", __DIR__)
@@ -151,7 +155,7 @@ To tell bun about those libraries you will need to add the following to the `ass
 and then configure `mix assets.setup` to install them:
 
 ```
-"assets.setup": ["bun.install --if-missing", "cmd --cd assets ../_build/bun install"],
+"assets.setup": ["bun.install --if-missing", "bun install"],
 ```
 
 Now run `mix assets.setup` and you are good to go!
@@ -193,7 +197,7 @@ bun_css: {Bun, :install_and_run, [:css, ~w(--watch)]}
 Update `mix.exs` aliases:
 
 ```elixir
-"assets.setup": ["bun.install --if-missing", "cmd --cd assets ../_build/bun install"],
+"assets.setup": ["bun.install --if-missing", "bun install"],
 "assets.build": ["bun js", "bun css"],
 "assets.deploy": ["bun css --minify", "bun js --minify", "tc.build", "phx.digest"],
 ```
