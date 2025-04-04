@@ -72,8 +72,8 @@ directory, the OS environment, and default arguments to the
 ```elixir
 config :bun,
   version: "1.1.22",
-  install: [
-    args: ~w(install),
+  assets: [
+    args: [],
     cd: Path.expand("../assets", __DIR__)
   ],
   js: [
@@ -84,7 +84,7 @@ config :bun,
 
 When `mix bun js` is invoked, it will invoke `bun build js/app.js`
 appending any argument given to the task. You can also use
-`mix bun install` to install bun dependencies.
+`mix bun assets` to run any `bun` command in the `assets` directory.
 
 ## Adding to Phoenix
 
@@ -108,7 +108,7 @@ entry point and write to `priv/static/assets`:
 ```elixir
 config :bun,
   version: "1.1.22",
-  install: [args: ~w(install), cd: Path.expand("../assets", __DIR__)],
+  assets: [args: [], cd: Path.expand("../assets", __DIR__)],
   js: [
     args: ~w(build js/app.js --outdir=../priv/static/assets --external /fonts/* --external /images/*),
     cd: Path.expand("../assets", __DIR__)
@@ -158,7 +158,7 @@ To tell bun about those libraries you will need to add the following to the `ass
 and then configure `mix assets.setup` to install them:
 
 ```
-"assets.setup": ["bun.install --if-missing", "bun install"],
+"assets.setup": ["bun.install --if-missing", "bun assets install"],
 ```
 
 Now run `mix assets.setup` and you are good to go!
@@ -180,12 +180,10 @@ First, update `assets/package.json`:
 }
 ```
 
-Update your `config/config.exs`:
+Update your `:tailwind` configuration in `config/config.exs` to use `bun` instead:
 
 ```elixir
 config :bun,
-  install: [...],
-  js: [...],
   css: [
     args: ~w(run tailwindcss --input=css/app.css --output=../priv/static/assets/app.css),
     cd: Path.expand("../assets", __DIR__)
@@ -203,7 +201,7 @@ bun_css: {Bun, :install_and_run, [:css, ~w(--watch)]}
 Update `mix.exs` aliases:
 
 ```elixir
-"assets.setup": ["bun.install --if-missing", "bun install"],
+"assets.setup": ["bun.install --if-missing", "bun assets install"],
 "assets.build": ["bun js", "bun css"],
 "assets.deploy": ["bun css --minify", "bun js --minify", "phx.digest"],
 ```
@@ -221,7 +219,7 @@ to add them to your application:
 
          import topbar from "../vendor/topbar"
 
-  2. Call `../_build/bun add topbar` inside your assets
+  2. Call `mix bun assets add topbar` inside your assets
      directory and `bun` will be able to automatically
      pick them up:
 
