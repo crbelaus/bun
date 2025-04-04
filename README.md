@@ -174,7 +174,8 @@ First, update `assets/package.json`:
   "phoenix": "workspace:*",
   "phoenix_html": "workspace:*",
   "phoenix_live_view": "workspace:*",
-  "tailwindcss": "^3.4.9",
+  "tailwindcss": "^4.1.0",
+  "@tailwindcss/cli": "^4.1.0",
   "topbar": "^3.0.0"
 }
 ```
