@@ -296,13 +296,11 @@ defmodule Bun do
     end
 
     # https://erlef.github.io/security-wg/secure_coding_and_deployment_hardening/inets
-    cacertfile = cacertfile() |> String.to_charlist()
-
     http_options =
       [
         ssl: [
           verify: :verify_peer,
-          cacertfile: cacertfile,
+          cacerts: :public_key.cacerts_get(),
           depth: 2,
           customize_hostname_check: [
             match_fun: :public_key.pkix_verify_hostname_match_fun(:https)
@@ -350,9 +348,5 @@ defmodule Bun do
     else
       _ -> nil
     end
-  end
-
-  defp cacertfile() do
-    Application.get_env(:bun, :cacerts_path) || CAStore.file_path()
   end
 end
