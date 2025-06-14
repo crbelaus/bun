@@ -32,8 +32,8 @@ def deps do
 end
 ```
 
-Once installed, change your config (i.e. `config/config.exs` or
-`config/runtime.exs`) to pick your bun version of choice:
+Once installed, change your `config/config.exs` to pick your
+bun version of choice:
 
 ```elixir
 config :bun, version: "1.1.22"
