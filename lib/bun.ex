@@ -183,9 +183,10 @@ defmodule Bun do
     raise "no arguments passed to bun"
   end
 
-  # `bun build` will keep running as a zombie process even after closing the parent Elixir
-  # process. The wrapper script monitors stdin to ensure that the bun process is closed.
-  defp run_bun_command(["build" | _] = args, opts) do
+  # `bun` subcommands can keep running as a zombie process even after closing the parent 
+  # Elixir process. The wrapper script monitors stdin to ensure that the bun process is closed.
+  # Applied to "build" as well as "x" subcommands.
+  defp run_bun_command([wrapped_subcommand | _] = args, opts) when wrapped_subcommand in ["build", "x"] do
     wrapper_path = Path.join(:code.priv_dir(:bun), "wrapper.js")
 
     System.cmd(bin_path(), [wrapper_path, bin_path()] ++ args, opts)
