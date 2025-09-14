@@ -67,7 +67,7 @@ defmodule Bun do
 
       {:ok, version} ->
         Logger.warning("""
-        Outdated bun version. Expected #{configured_version}, got #{version}. \
+        Mismatched bun version. Expected #{configured_version}, got #{version}. \
         Please run `mix bun.install` or update the version in your config files.\
         """)
 
