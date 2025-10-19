@@ -1,6 +1,6 @@
 defmodule Bun do
   # https://github.com/oven-sh/bun/releases
-  @latest_version "1.2.2"
+  @latest_version "1.3.0"
   @min_windows_version "1.1.0"
 
   @moduledoc """
@@ -183,7 +183,7 @@ defmodule Bun do
     raise "no arguments passed to bun"
   end
 
-  # `bun` subcommands can keep running as a zombie process even after closing the parent 
+  # `bun` subcommands can keep running as a zombie process even after closing the parent
   # Elixir process. The wrapper script monitors stdin to ensure that the bun process is closed.
   # Applied to "build" as well as "x" subcommands.
   defp run_bun_command([wrapped_subcommand | _] = args, opts)
@@ -210,6 +210,48 @@ defmodule Bun do
 
     run(profile, args)
   end
+
+  @doc """
+  Starts a pool of bun workers for executing JavaScript modules.
+
+  See `Bun.Supervisor.start_link/1` for available options.
+
+  ## Example
+
+      {:ok, _pid} = Bun.start_link()
+      {:ok, result} = Bun.call("myModule.js", ["arg1", "arg2"])
+  """
+  defdelegate start_link(opts \\ []), to: Bun.Supervisor
+
+  @doc """
+  Stops the bun worker pool.
+
+  See `Bun.Supervisor.stop/1` for details.
+  """
+  defdelegate stop(), to: Bun.Supervisor
+
+  @doc """
+  Calls a JavaScript module with the given arguments using the worker pool.
+
+  See `Bun.Supervisor.call/3` for details on arguments and options.
+
+  ## Example
+
+      {:ok, result} = Bun.call("myModule.js", ["arg1", "arg2"])
+      {:ok, result} = Bun.call("myModule.js", [], timeout: 10_000)
+  """
+  defdelegate call(module, args \\ [], opts \\ []), to: Bun.Supervisor
+
+  @doc """
+  Calls a JavaScript module and raises on error.
+
+  See `Bun.Supervisor.call!/3` for details on arguments and options.
+
+  ## Example
+
+      result = Bun.call!("myModule.js", ["arg1"])
+  """
+  defdelegate call!(module, args \\ [], opts \\ []), to: Bun.Supervisor
 
   def install do
     zip =

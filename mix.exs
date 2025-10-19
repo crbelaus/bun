@@ -40,6 +40,7 @@ defmodule Bun.MixProject do
 
   defp deps do
     [
+      {:nimble_pool, "~> 1.0"},
       {:ex_doc, ">= 0.0.0", only: :dev}
     ]
   end
