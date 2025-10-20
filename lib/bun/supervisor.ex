@@ -24,7 +24,28 @@ defmodule Bun.Supervisor do
       :ok = Bun.Supervisor.stop()
   """
 
+  alias Bun.Supervisor.Worker
+
   @pool_name __MODULE__
+
+  @doc """
+  Returns a child specification for use in a supervision tree.
+
+  ## Options
+
+    * `:pool_size` - Number of workers in the pool (default: `System.schedulers_online()`)
+    * `:name` - Name to register the pool (default: `Bun.Supervisor`)
+
+  """
+  def child_spec(opts) do
+    %{
+      id: __MODULE__,
+      start: {__MODULE__, :start_link, [opts]},
+      type: :worker,
+      restart: :permanent,
+      shutdown: 5000
+    }
+  end
 
   @doc """
   Starts the pool of bun workers.
@@ -40,7 +61,7 @@ defmodule Bun.Supervisor do
     name = Keyword.get(opts, :name, @pool_name)
 
     pool_opts = [
-      worker: {Bun.Supervisor.Worker, []},
+      worker: {Worker, []},
       pool_size: pool_size,
       name: name
     ]
@@ -85,7 +106,7 @@ defmodule Bun.Supervisor do
       pool,
       :checkout,
       fn _from, worker ->
-        result = Bun.Supervisor.Worker.execute(worker, module, args, opts)
+        result = Worker.execute(worker, module, args, opts)
         {result, worker}
       end,
       timeout
