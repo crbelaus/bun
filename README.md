@@ -163,6 +163,31 @@ and then configure `mix assets.setup` to install them:
 
 Now run `mix assets.setup` and you are good to go!
 
+### LiveView colocated JavaScript
+
+When using Phoenix LiveView colocated JavaScript feature, the bundler needs to be configured to look for packages in the correct locations.
+
+With `esbuild`, the Phoenix generator automatically sets up the `NODE_PATH` environment variable for you:
+
+```elixir
+config :esbuild,
+  my_app: [
+    args:
+      ~w(js/app.js --bundle --target=es2022 --outdir=../priv/static/assets/js --external:/fonts/* --external:/images/* --alias:@=.),
+    cd: Path.expand("../assets", __DIR__),
+    env: %{
+      "NODE_PATH" => [Path.expand("../deps", __DIR__), Mix.Project.build_path()]
+    }
+  ]
+```
+
+To configure `bun` for colocated JavaScript, you need to tell LiveView where to write the colocated files. Unlike `esbuild`, which respects the `NODE_PATH` environment variable for module resolution, `bun` uses its own module resolution algorithm and does not recognize `NODE_PATH`. Instead, configure the `:target_directory` option in your `config.exs` to specify where LiveView should output colocated JavaScript files:
+
+```elixir
+config :phoenix_live_view, :colocated_js,
+  target_directory: Path.expand("../assets/node_modules/phoenix-colocated", __DIR__)
+```
+
 ### Replace esbuild with bun
 
 You can use `bun` to build CSS with TailwindCSS, replacing both `esbuild` and the `tailwindcss` library in Elixir.
