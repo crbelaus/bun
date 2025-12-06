@@ -22,6 +22,8 @@ jobs:
             erlang: 27.3
           - elixir: 1.18.0
             erlang: 27.3
+          - elixir: 1.19.0
+            erlang: 28.0
     name: Elixir v${{ matrix.versions.elixir }}, Erlang v${{ matrix.versions.erlang }} on ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
