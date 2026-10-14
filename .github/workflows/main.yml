@@ -14,21 +14,21 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
         versions:
-          - elixir: 1.15.0
-            erlang: 25.3
           - elixir: 1.16.0
-            erlang: 25.3
+            erlang: 26.2
           - elixir: 1.17.0
             erlang: 27.3
           - elixir: 1.18.0
             erlang: 27.3
           - elixir: 1.19.0
             erlang: 28.0
+          - elixir: 1.20.0
+            erlang: 29.0
     name: Elixir v${{ matrix.versions.elixir }}, Erlang v${{ matrix.versions.erlang }} on ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
 
-      - uses: erlef/setup-beam@566deebc640988a494af16ecdf6f820fe0d3fea4
+      - uses: erlef/setup-beam@v1
         with:
           otp-version: ${{matrix.versions.erlang}}
           elixir-version: ${{matrix.versions.elixir}}
